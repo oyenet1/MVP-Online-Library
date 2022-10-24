@@ -25,28 +25,26 @@ class CreateNewUser implements CreatesNewUsers
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'email' => [
-                // 'required',
-                // 'string',
-                // 'email',
-                // 'max:255',
-                // Rule::unique(User::class),
-                'nullable'
-            ], 
-            'phone' => ['required', 'digits:10'],
-            'library_id' => 'nullable',
+                'required',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique(User::class),
+
+            ],
+            'phone' => ['nullable', 'digits:10'],
             'password' => $this->passwordRules(),
 
         ])->validate();
 
         $user = User::create([
             'name' => $input['name'],
-            'email' => Str::slug($input['name']).'@e-library.com',
+            'email' => $input['email'],
             'phone' => $input['phone'],
-            'library_id' => strtoupper($input['name'].'-' . Str::random(5)),
             'password' => Hash::make($input['password']),
         ]);
 
-        return $user->attachRole(2);
-
+        // return $user->attachRole(2);
+        return $user;
     }
 }
