@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
         $roles = Role::whereIn('id', [1, 2])->get();
         $user = User::create([
             'name' => 'Bowofade Oyerinde',
-            'email' => 'bowofadeoyerinde@gmail.com',
+            'email' => 'admin@library.com',
             'phone' => '7065720177',
             'password' => Hash::make('password'), //password in lowercase
             'image' => 'https://avatars.githubusercontent.com/u/55518926?s=400&u=08de5bd4f5f93eb6d1c12edd55def90379d3b892&v=4',
