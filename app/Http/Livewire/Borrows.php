@@ -6,55 +6,44 @@ use App\Models\Book;
 use App\Models\User;
 use Livewire\Component;
 use App\Models\Borrower;
-use Illuminate\Support\Facades\Gate;
+use Carbon\Carbon;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Database\Eloquent\Builder;
 
 class Borrows extends Component
 {
     use WithPagination;
+    protected $paginationTheme = 'bootstrap';
+
     public $data = [];
-    public $perPage = 24;
+    public $perPage = 5;
     public $modal = false;
     public $collection = [];
 
     public $search;
     public $sort = 'asc';
 
+    public $update = false;
 
-    function borrow($id)
+
+    function  checkOut(Borrower $history)
     {
-        if (Gate::allows('borrow',)) {
-            $book = Book::findOrFail($id);
+        $return = $history->update([
+            'date_returned' => Carbon::now(),
+            'status' => 'checked-out'
+        ]);
+        if ($return) {
 
-            $this->data['user_id'] = auth()->user()->id;
-            $this->data['book_id'] = $book->id;
-            $this->data['date_borrowed'] = date('Y-m-d H:i:s');
-            $this->data['status'] = 'reading';
+            // if the book has been checkout, change then the user can borrow again
+            $history->user()->update(['can_borrow' => true]);
 
-            Borrower::create($this->data);
-
-            // decrease the quantity of book by 1
-            Book::find($book->id)->decrement('quantity');
-
-            // update user can borrow field
-            $user = User::where('id', auth()->user()->id)->update(['can_borrow' => false]);
-
-
-            if ($user) {
-                $this->dispatchBrowserEvent('swal:success', [
-                    'icon' => 'success',
-                    'text' => 'Book borrowed Successfully',
-                    'title' => 'Borrowed',
-                    'timer' => 2000
-                ]);
-            }
-        } else {
+            // $user->update(['can_borrow' => true]); // user will be able to borrow book again
             $this->dispatchBrowserEvent('swal:success', [
-                'icon' => 'error',
-                'text' => 'You have an outstanding book or payment',
-                'title' => 'Access Denied',
-                'button' => true,
-                'dangerMode' => true
+                'icon' => 'success',
+                'text' => 'Book has been returned by' . $history->user->name,
+                'title' => 'Checked Out',
+                'timer' => 3000,
             ]);
         }
     }
@@ -62,8 +51,22 @@ class Borrows extends Component
 
     public function render()
     {
-        $search = '%' . $this->search . '%';
-        $collections = Book::where('title', 'LIKE', $search)->orWhere('author', 'LIKE', $search)->orderBy('updated_at', 'desc')->paginate($this->perPage);
-        return view('livewire.borrows', compact(['collections']));
+        $term = '%' . $this->search . '%';
+
+        $histories = Borrower::with('user', 'book')
+            ->where('date_borrowed', 'LIKE', $term)
+            ->orWhere('status', 'LIKE', $term)
+            ->orWhereHas('user', function (Builder $query) {
+                $term = "%$this->search%";
+                $query->where('name', 'LIKE', $term)
+                    ->orWhere('email', 'LIKE', $term);
+            })->orWhereHas('book', function (Builder $query) {
+                $term = "%$this->search%";
+                $query->where('title', 'LIKE', $term)
+                    ->orWhere('authors', 'LIKE', $term)
+                    ->orWhere('publisher', 'LIKE', $term)
+                    ->orWhere('genre', 'LIKE', $term);
+            })->latest()->paginate($this->perPage);
+        return view('livewire.borrows', compact(['histories']));
     }
 }

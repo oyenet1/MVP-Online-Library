@@ -19,8 +19,8 @@ class CreateBorrowersTable extends Migration
             $table->unsignedBigInteger('book_id')->index();
             $table->dateTime('date_borrowed');
             $table->dateTime('date_returned')->nullable();
-            $table->string('status');
-            $table->timestamp('created_at')->nullable();
+            $table->string('status')->default('check-in');
+            $table->timestamp('created_at');
             $table->timestamp('updated_at')->nullable();
         });
     }

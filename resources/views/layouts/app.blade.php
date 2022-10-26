@@ -122,7 +122,7 @@
 					<div class="collapse" id="nav-user-link">
 						<ul class="list-unstyled">
 							<li class="list-group-item">
-								<a href=""><i class="feather icon-user m-r-5"></i>View Profile</a>
+								<a href="/profile"><i class="feather icon-user m-r-5"></i>View Profile</a>
 							</li>
 							{{-- <li class="list-group-item"><a href="#!"><i class="feather icon-settings m-r-5"></i>Settings</a></li> --}}
 							<li class="list-group-item">
@@ -140,35 +140,46 @@
 					<li class="nav-item pcoded-menu-caption">
 						<label>Navigation</label>
 					</li>
-					<li class="nav-item">
-						<a href="/dashboard" class="nav-link {{ request()->is('/branches') ? 'nav-active' : '' }}"><span
-								class="pcoded-micon"><i class="feather icon-home"></i></span><span class="pcoded-mtext">Dashboard</span></a>
-					</li>
 					@if (auth()->user()->hasRole(['admin', 'librarian']))
 						<li class="nav-item">
-							<a href="" class="nav-link {{ request()->is('/headbranch') ? 'nav-active' : '' }}">
+							<a href="/dashboard" class="nav-link {{ request()->is('/branches') ? 'nav-active' : '' }}"><span
+									class="pcoded-micon"><i class="feather icon-home"></i></span><span class="pcoded-mtext">Dashboard</span></a>
+						</li>
+						<li class="nav-item">
+							<a href="/borrowers" class="nav-link {{ request()->is('/borroers') ? 'nav-active' : '' }}">
 								<span class="pcoded-micon">
 									<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
 										<path
 											d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
 									</svg>
 								</span>
-								<span class="pcoded-mtext">Books</span>
+								<span class="pcoded-mtext">Borrowers History</span>
 							</a>
 						</li>
 					@else
 						<li class="nav-item">
-							<a href="" class="nav-link {{ request()->is('admin/cities') ? 'nav-active' : '' }}">
+							<a href="/home" class="nav-link {{ request()->is('admin/cities') ? 'nav-active' : '' }}">
 								<span class="pcoded-micon">
 									<svg xmlns="http://www.w3.org/2000/svg" class="feather h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
 										<path
 											d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
 									</svg>
 								</span>
-								<span class="pcoded-mtext">Staffs</span>
+								<span class="pcoded-mtext">Library</span>
 							</a>
 						</li>
 					@endif
+					<li class="nav-item">
+						<a href="/profile" class="nav-link {{ request()->is('profile') ? 'nav-active' : '' }}">
+							<span class="pcoded-micon">
+								<svg xmlns="http://www.w3.org/2000/svg" class="feather h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+									<path
+										d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+								</svg>
+							</span>
+							<span class="pcoded-mtext">Profile</span>
+						</a>
+					</li>
 				</ul>
 
 			</div>
@@ -290,10 +301,8 @@
 								</form>
 							</div>
 							<ul class="pro-body">
-								<li><a href="" class="dropdown-item"><i class="feather icon-user"></i> Profile</a>
+								<li><a href="/profile" class="dropdown-item"><i class="feather icon-user"></i> Profile</a>
 								</li>
-								<li><a href="email_inbox.html" class="dropdown-item"><i class="feather icon-mail"></i> My Messages</a></li>
-								<li><a href="auth-signin.html" class="dropdown-item"><i class="feather icon-lock"></i> Lock Screen</a></li>
 							</ul>
 						</div>
 					</div>
