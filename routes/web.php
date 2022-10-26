@@ -18,21 +18,14 @@ use App\Http\Controllers\BackendController;
 
 Route::get('/', function () {
     if (Auth::check()) {
-       if (auth()->user()->hasRole('librarian')) {
-        return view('admin.panel');
-       }
-       else{
-        return view('books.library');
-       }
+        // redirect to dashboard if the user role is admin or librarian else redirect to home
+        return auth()->user()->hasRole(['admin', 'librarian']) ? redirect('/dashboard') : redirect('/home');
     }
     return view('auth.login');
 });
 
-// emails
-Route::view('contact-response', 'emails.contact-response');
-Route::view('contact-mail', 'emails.contact-form');
+Route::get('/dashboard', App\Http\Livewire\AllBooks::class)->middleware('role:admin|librarian');
 
 
-Route::get('librarian', [BackendController::class, 'admin'])->name('librarian');
-Route::get('library', [BackendController::class, 'library'])->name('library')->middleware('role:student');
-Route::get('all-books', [BookController::class, 'index'])->name('admin.book')->middleware('role:librarian');
+Route::get('/home', App\Http\Livewire\Books::class)->name('library');
+Route::get('/borrows', App\Http\Livewire\Borrows::class)->name('admin.book')->middleware('role:admin|librarian');

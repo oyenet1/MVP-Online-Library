@@ -18,30 +18,18 @@ class Books extends Component
 
     // types of book
 
-    public $title, $author, $quantity, $cover, $isBind, $all,  $cid;
+    public  $cid;
     public $show = false;
     public $update = false;
     public $modal = false;
 
-    Public $search;
+    public $search;
 
-    // public $returned = true;
-
-    public $binded = [];
-    public $borrowed = [];
     public $data = [];
 
     protected $listeners = [
         'delete' => 'delete',
         'show' => 'alert'
-    ];
-
-    protected $rules = [
-        'title' => 'required',
-        'author' => 'required',
-        'quantity' => 'required|int|min:1|max:2000',
-        'cover' => 'nullable|url',
-        'isBind' => 'required|boolean'
     ];
 
     // refreshinputs after saved
@@ -54,13 +42,13 @@ class Books extends Component
         $this->isBind = '';
     }
 
-    // show modal 
+    // show modal
     public function show()
     {
         $this->modal = true;
     }
 
-    public function save()
+    public function borrow()
     {
         $data = $this->validate();
         $saved = Book::create($data);
@@ -76,58 +64,6 @@ class Books extends Component
             ]);
 
             $this->refreshInputs();
-        }
-    }
-
-    public function edit($id)
-    {
-        $book = Book::findOrFail($id);
-
-        $this->cid = $book->id;
-        $this->title = $book->title;
-        $this->author = $book->author;
-        $this->quantity = $book->quantity;
-        $this->cover = $book->cover;
-        $this->isBind = $book->isBind;
-        $this->update = true;
-        $this->modal = true;
-    }
-
-    function update()
-    {
-
-        $cid = $this->cid;
-        $book = $this->validate();
-        $true = Book::find($cid)->update($book);
-
-        $this->modal = false;
-
-        if ($true) {
-            $this->dispatchBrowserEvent('swal:success', [
-                'icon' => 'success',
-                'text' => 'Book Updated Successfully',
-                'title' => 'Confirmed',
-                'timer' => 2000,
-            ]);
-        }
-    }
-
-    // bind book
-    function bind($id)
-    {
-        $book = Book::findOrFail($id);
-        $this->cid = $book->id;
-        $true = Book::find($this->cid)->update([
-            'isBind' => true,
-        ]);
-
-        if ($true) {
-            $this->dispatchBrowserEvent('swal:success', [
-                'icon' => 'success',
-                'text' => 'Book has been sent for binding',
-                'title' => 'Binded',
-                'timer' => 2000,
-            ]);
         }
     }
 
@@ -196,63 +132,13 @@ class Books extends Component
         }
     }
 
-    function overdue($id)
-    {
-        $data = Borrower::findOrFail($id);
-        $data['status'] = 'overdue';
-
-        $data['date_returned'] = null;
-
-        $data->update();
-
-        $user = User::where('id', auth()->user()->id)->update(['can_borrow' => false]);
-
-        // check in increased
-        if ($user) {
-            $this->dispatchBrowserEvent('swal:success', [
-                'icon' => 'success',
-                'text' => 'Book marked for Payment Overdue',
-                'title' => 'Overdue',
-                'timer' => 2000,
-            ]);
-        }
-    }
-
-
-    public function confirmDelete($id)
-    {
-
-        $this->dispatchBrowserEvent('swal:success', [
-            'icon' => 'success',
-            'text' => 'Record deleted Successfully',
-            'title' => 'Confirmed',
-            'timer' => 2000
-        ]);
-
-        $this->delete($id);
-    }
-
-    public function delete($id)
-    {
-        Book::where('id', $id)->delete();
-    }
-
 
 
 
     public function render()
     {
-        $search = '%'. $this->search . '%';
-        $this->all = Book::where('title', 'LIKE', $search)->orWhere('author', 'LIKE', $search)->orWhere('quantity', 'LIKE', $search)->get();
-        $this->binded = Book::where('isBind',  true)->get();
-        $available = Book::where('isBind',  false)->paginate($this->perPage);
-        $this->borrowed = Borrower::all();
-
-        $books = Book::where('isBind',  false)->paginate($this->perPage);
-        $losts = Borrower::where('status',  'lost')->paginate($this->perPage);
-        $overdues = Borrower::where('status',  'overdue')->paginate($this->perPage);
-        $binds = Book::where('isBind',  true)->paginate($this->perPage);
-        $borrowers = Borrower::where('status', 'LIKE', $search)->paginate($this->perPage);
-        return view('livewire.books', compact(['books', 'binds', 'borrowers', 'available', 'losts', 'overdues']));
+        $term = '%' . $this->search . '%';
+        $books = Book::where('authors', 'LIKE', $term)->orWhere('title', 'LIKE', $term)->orWhere('isbn', 'LIKE', $term)->orWhere('published_at', 'LIKE', $term)->paginate(5);
+        return view('livewire.books', compact(['books']));
     }
 }

@@ -20,12 +20,13 @@
 </head>
 
 <body>
-	<div class="flex items-center min-h-screen p-6 bg-gray-50">
-		<div class="flex-1 h-full max-w-md mx-auto overflow-hidden bg-white rounded-lg shadow-xl">
+	<div class="flex min-h-screen items-center bg-gray-50 p-6">
+		<div class="mx-auto h-full max-w-md flex-1 overflow-hidden rounded-lg bg-white shadow-xl">
 			<div class="flex flex-col overflow-y-auto">
-				<div class="h-32 pt-6 -mb-6 md:h-auto">
-					<h2 class="overflow-hidden font-mono font-black text-center uppercase">MVP Online Library system</h2>
-					<img aria-hidden="true" class="object-cover w-20 h-20 mx-auto" src="/img/uniabuja.png" alt="Office" />
+				<div class="-mb-6 h-32 pt-6 md:h-auto">
+					<h2 class="overflow-hidden text-center font-mono font-black uppercase">MVP Online Library system</h2>
+					<img aria-hidden="true" class="mx-auto h-20 w-20 rounded-full object-cover" src="/img/bowofade.jpg"
+						alt="Office" />
 				</div>
 				<div class="flex items-center justify-center p-6 sm:p-12">
 					<div class="w-full">
@@ -46,7 +47,7 @@
 								@enderror
 							</label>
 
-							<label class="block mt-4 text-sm">
+							<label class="mt-4 block text-sm">
 								<span class="text-gray-700">Email</span>
 								<input name="email" value="{{ old('email') }}"
 									class="@error('email')
@@ -57,7 +58,7 @@
 									<span class="text-sm font-normal text-red-600">{{ $message }}</span>
 								@enderror
 							</label>
-							<label class="block mt-4 text-sm">
+							<label class="mt-4 block text-sm">
 								<span class="text-gray-700">Password</span>
 								<input name="password" value="{{ old('password') }}"
 									class="@error('password')
@@ -68,7 +69,7 @@
 									<span class="text-sm font-normal text-red-600">{{ $message }}</span>
 								@enderror
 							</label>
-							<label class="block mt-4 text-sm">
+							<label class="mt-4 block text-sm">
 								<span class="text-gray-700">Confirm Password</span>
 								<input name="password_confirmation" value="{{ old('password_confirmation') }}"
 									class="@error('field')
@@ -79,10 +80,10 @@
 									<span class="text-sm font-normal text-red-600">{{ $message }}</span>
 								@enderror
 							</label>
-							<div class="flex mt-6 text-sm">
+							<div class="mt-6 flex text-sm">
 								<label class="flex items-center">
 									<input type="checkbox"
-										class="text-green-600 form-checkbox focus:shadow-outline-green focus:border-green-400 focus:outline-none" />
+										class="form-checkbox focus:shadow-outline-green text-green-600 focus:border-green-400 focus:outline-none" />
 									<span class="ml-2">
 										I agree to the
 										<span class="underline">privacy policy</span>
@@ -92,7 +93,7 @@
 
 							<!-- You should use a button here, as the anchor is only used for the example  -->
 							<button type="submit"
-								class="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-lg focus:shadow-outline-green hover:bg-green-700 focus:outline-none active:bg-green-600">
+								class="focus:shadow-outline-green mt-4 block w-full rounded-lg border border-transparent bg-green-600 px-4 py-2 text-center text-sm font-medium leading-5 text-white transition-colors duration-150 hover:bg-green-700 focus:outline-none active:bg-green-600">
 								Create account
 							</button>
 						</form>

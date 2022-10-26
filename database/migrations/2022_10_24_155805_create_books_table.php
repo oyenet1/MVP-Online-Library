@@ -18,7 +18,7 @@ class CreateBooksTable extends Migration
             $table->string('title');
             $table->string('authors');
             $table->string('cover_image');
-            $table->integer('isnb');
+            $table->string('isbn');
             $table->integer('revision_number');
             $table->string('publisher');
             $table->string('genre')->nullable();
