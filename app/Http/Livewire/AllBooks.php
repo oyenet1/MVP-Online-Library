@@ -79,7 +79,7 @@ class AllBooks extends Component
                 'icon' => 'success',
                 'text' => strtoupper($this->title) . ' added to library',
                 'title' => 'Book Added',
-                'timer' => 3000,
+                'timer' => 5000,
             ]);
         }
         $this->refreshInputs();
