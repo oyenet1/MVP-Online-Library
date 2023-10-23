@@ -143,7 +143,7 @@ class AllBooks extends Component
                 'icon' => 'success',
                 'text' => strtoupper($this->title) . ' added to library',
                 'title' => 'Book Added',
-                'timer' => 3000,
+                'timer' => 7000,
             ]);
         }
         $this->refreshInputs();
@@ -169,7 +169,7 @@ class AllBooks extends Component
                 'icon' => 'success',
                 'text' => $book->title . ' has deleted Successfully from library',
                 'title' => 'Deleted',
-                'timer' => 3000,
+                'timer' => 7000,
             ]);
         }
         $this->update = false;
